@@ -1,10 +1,11 @@
 import { useState, type FormEvent } from 'react';
-import { Phone, MapPin, Clock, Mail, Send, CheckCircle, ExternalLink, Calendar } from 'lucide-react';
+import { Phone, MapPin, Clock, Mail, Send, CheckCircle, ExternalLink, Calendar, AlertCircle, Loader2 } from 'lucide-react';
 import { useSeo } from '@/hooks/useSeo';
 import { useReveal } from '@/hooks/useReveal';
 import { SectionHeading } from '@/components/SectionHeading';
 import { salon, hours, formatDayHours, isOpenNow, getTodayHours } from '@/data/salonInfo';
 import { serviceCategories } from '@/data/salon';
+import { supabase } from '@/lib/supabase';
 
 export function ContactPage() {
   useSeo({
@@ -13,11 +14,39 @@ export function ContactPage() {
   });
 
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const today = getTodayHours();
   const { ref, visible } = useReveal<HTMLDivElement>();
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setLoading(true);
+    setError(null);
+
+    const formData = new FormData(e.currentTarget);
+    const payload = {
+      name: (formData.get('name') as string)?.trim(),
+      firstName: (formData.get('firstName') as string)?.trim(),
+      phone: (formData.get('phone') as string)?.trim(),
+      email: (formData.get('email') as string)?.trim(),
+      service: (formData.get('service') as string)?.trim(),
+      message: (formData.get('message') as string)?.trim(),
+    };
+
+    const { error: fnError } = await supabase.functions.invoke('send-contact-email', {
+      body: payload,
+    });
+
+    setLoading(false);
+
+    if (fnError) {
+      setError(
+        `Une erreur est survenue lors de l'envoi. Merci de nous appeler directement au ${salon.phone}.`
+      );
+      return;
+    }
+
     setSubmitted(true);
   };
 
@@ -56,7 +85,7 @@ export function ContactPage() {
                 <p className="mt-4 font-serif text-2xl font-semibold">
                   Aujourd'hui : {formatDayHours(today)}
                 </p>
-                <a
+                
                   href={`tel:${salon.phoneRaw}`}
                   className="mt-6 btn-gold w-full"
                 >
@@ -193,8 +222,22 @@ export function ContactPage() {
                         className="w-full resize-none rounded-xl border border-ink-200 bg-paper-50 px-4 py-3 text-sm text-ink-900 transition-colors focus:border-ink-900 focus:outline-none focus:ring-1 focus:ring-ink-900"
                       />
                     </div>
-                    <button type="submit" className="btn-primary w-full">
-                      <Send size={16} /> Envoyer le message
+                    {error && (
+                      <div className="flex items-start gap-2 rounded-xl bg-red-50 p-4 text-sm text-red-700">
+                        <AlertCircle size={16} className="mt-0.5 shrink-0" />
+                        <span>{error}</span>
+                      </div>
+                    )}
+                    <button type="submit" disabled={loading} className="btn-primary w-full disabled:opacity-60">
+                      {loading ? (
+                        <>
+                          <Loader2 size={16} className="animate-spin" /> Envoi en cours…
+                        </>
+                      ) : (
+                        <>
+                          <Send size={16} /> Envoyer le message
+                        </>
+                      )}
                     </button>
                     <p className="text-center text-xs text-ink-400">
                       Pour un rendez-vous immédiat, appelez le {salon.phone}.
@@ -213,7 +256,7 @@ export function ContactPage() {
                   referrerPolicy="no-referrer-when-downgrade"
                 />
               </div>
-              <a
+              
                 href={salon.mapsDirections}
                 target="_blank"
                 rel="noopener noreferrer"
@@ -252,7 +295,7 @@ function InfoCard({
       <p className="mt-3 font-serif text-lg font-semibold text-ink-900">{value}</p>
       {sub && <p className="mt-0.5 text-xs text-ink-400">{sub}</p>}
       {action && (
-        <a
+        
           href={action.href}
           target={action.href.startsWith('http') ? '_blank' : undefined}
           rel={action.href.startsWith('http') ? 'noopener noreferrer' : undefined}
