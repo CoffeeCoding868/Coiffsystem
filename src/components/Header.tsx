@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Phone, Menu, X } from 'lucide-react';
-import { type Route, navigate } from '@/router';
+import { type Route, routeToPath, handleInternalLinkClick } from '@/router';
 import { salon, isOpenNow } from '@/data/salonInfo';
 
 interface NavLink {
@@ -33,11 +33,6 @@ export function Header({ current }: { current: Route }) {
     return () => { document.body.style.overflow = ''; };
   }, [mobileOpen]);
 
-  const go = (route: Route) => {
-    setMobileOpen(false);
-    navigate(route);
-  };
-
   return (
     <>
       <header
@@ -48,8 +43,9 @@ export function Header({ current }: { current: Route }) {
         }`}
       >
         <div className="container-content flex h-20 items-center justify-between">
-          <button
-            onClick={() => go('home')}
+          <a
+            href={routeToPath('home')}
+            onClick={(e) => { setMobileOpen(false); handleInternalLinkClick(e, 'home'); }}
             className="group flex items-center gap-3 text-left"
             aria-label="Coiff'System accueil"
           >
@@ -60,13 +56,14 @@ export function Header({ current }: { current: Route }) {
               <span className="font-serif text-lg font-semibold text-ink-900">Coiff'System</span>
               <span className="text-[10px] uppercase tracking-widest text-ink-400">Strasbourg Neudorf</span>
             </span>
-          </button>
+          </a>
 
           <nav className="hidden items-center gap-1 lg:flex">
             {links.map((link) => (
-              <button
+              <a
                 key={link.route}
-                onClick={() => go(link.route)}
+                href={routeToPath(link.route)}
+                onClick={(e) => handleInternalLinkClick(e, link.route)}
                 className={`relative rounded-full px-4 py-2 text-sm font-medium transition-colors ${
                   current === link.route
                     ? 'text-ink-900'
@@ -77,7 +74,7 @@ export function Header({ current }: { current: Route }) {
                 {current === link.route && (
                   <span className="absolute inset-x-4 -bottom-0.5 h-px bg-gold-500" />
                 )}
-              </button>
+              </a>
             ))}
           </nav>
 
@@ -94,12 +91,13 @@ export function Header({ current }: { current: Route }) {
               />
               {isOpenNow() ? 'Ouvert' : 'Fermé'}
             </span>
-            <button
-              onClick={() => go('contact')}
+            <a
+              href={routeToPath('contact')}
+              onClick={(e) => handleInternalLinkClick(e, 'contact')}
               className="btn-gold !px-5 !py-2.5"
             >
               Rendez-vous
-            </button>
+            </a>
           </div>
 
           <button
@@ -130,9 +128,10 @@ export function Header({ current }: { current: Route }) {
         >
           <nav className="flex flex-col gap-1">
             {links.map((link) => (
-              <button
+              <a
                 key={link.route}
-                onClick={() => go(link.route)}
+                href={routeToPath(link.route)}
+                onClick={(e) => { setMobileOpen(false); handleInternalLinkClick(e, link.route); }}
                 className={`rounded-xl px-4 py-3 text-left font-serif text-xl transition-colors ${
                   current === link.route
                     ? 'bg-ink-900 text-paper-50'
@@ -140,7 +139,7 @@ export function Header({ current }: { current: Route }) {
                 }`}
               >
                 {link.label}
-              </button>
+              </a>
             ))}
           </nav>
           <div className="mt-8 flex flex-col gap-3 border-t border-ink-200 pt-6">
@@ -150,12 +149,13 @@ export function Header({ current }: { current: Route }) {
             >
               <Phone size={16} /> {salon.phone}
             </a>
-            <button
-              onClick={() => go('contact')}
+            <a
+              href={routeToPath('contact')}
+              onClick={(e) => { setMobileOpen(false); handleInternalLinkClick(e, 'contact'); }}
               className="btn-gold"
             >
               Prendre rendez-vous
-            </button>
+            </a>
           </div>
         </div>
       </div>

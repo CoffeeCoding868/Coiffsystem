@@ -1,5 +1,5 @@
 import { Phone, MapPin, Clock, Instagram, Facebook, Scissors } from 'lucide-react';
-import { type Route, navigate } from '@/router';
+import { type Route, routeToPath, handleInternalLinkClick } from '@/router';
 import { salon, hours, formatDayHours } from '@/data/salonInfo';
 
 const navLinks: { route: Route; label: string }[] = [
@@ -55,12 +55,13 @@ export function Footer() {
             <ul className="mt-4 space-y-2.5">
               {navLinks.map((l) => (
                 <li key={l.route}>
-                  <button
-                    onClick={() => navigate(l.route)}
+                  <a
+                    href={routeToPath(l.route)}
+                    onClick={(e) => handleInternalLinkClick(e, l.route)}
                     className="text-sm text-paper-200/70 transition-colors hover:text-gold-400"
                   >
                     {l.label}
-                  </button>
+                  </a>
                 </li>
               ))}
             </ul>

@@ -1,6 +1,6 @@
 import { Phone, Calendar, Clock } from 'lucide-react';
 import { salon, formatDayHours, getTodayHours, isOpenNow } from '@/data/salonInfo';
-import { navigate } from '@/router';
+import { routeToPath, handleInternalLinkClick } from '@/router';
 
 export function CtaBanner() {
   const today = getTodayHours();
@@ -25,9 +25,9 @@ export function CtaBanner() {
             <a href={`tel:${salon.phoneRaw}`} className="btn-gold w-full sm:w-auto">
               <Phone size={18} /> Appeler le {salon.phone}
             </a>
-            <button onClick={() => navigate('contact')} className="btn-outline w-full !border-paper-200/30 !text-paper-50 hover:!bg-paper-50 hover:!text-ink-900 sm:w-auto">
+            <a href={routeToPath('contact')} onClick={(e) => handleInternalLinkClick(e, 'contact')} className="btn-outline w-full !border-paper-200/30 !text-paper-50 hover:!bg-paper-50 hover:!text-ink-900 sm:w-auto">
               <Calendar size={18} /> Prendre rendez-vous
-            </button>
+            </a>
           </div>
 
           <div className="mt-8 flex flex-col items-center justify-center gap-2 text-sm text-paper-200/60 sm:flex-row sm:gap-6">

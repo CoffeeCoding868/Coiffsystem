@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Phone, Calendar } from 'lucide-react';
 import { salon } from '@/data/salonInfo';
-import { type Route, navigate } from '@/router';
+import { routeToPath, handleInternalLinkClick } from '@/router';
 
 export function FloatingCTA() {
   const [visible, setVisible] = useState(false);
@@ -26,12 +26,13 @@ export function FloatingCTA() {
         >
           <Phone size={18} /> Appeler
         </a>
-        <button
-          onClick={() => navigate('contact')}
+        <a
+          href={routeToPath('contact')}
+          onClick={(e) => handleInternalLinkClick(e, 'contact')}
           className="flex items-center justify-center gap-2 bg-gold-500 py-4 text-sm font-medium text-ink-900 active:bg-gold-400"
         >
           <Calendar size={18} /> Rendez-vous
-        </button>
+        </a>
       </div>
     </div>
   );
