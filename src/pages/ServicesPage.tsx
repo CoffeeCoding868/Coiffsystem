@@ -5,7 +5,7 @@ import { SectionHeading } from '@/components/SectionHeading';
 import { CtaBanner } from '@/components/CtaBanner';
 import { salon } from '@/data/salonInfo';
 import { serviceCategories } from '@/data/salon';
-import { navigate } from '@/router';
+import { routeToPath, handleInternalLinkClick } from '@/router';
 
 export function ServicesPage() {
   useSeo({
@@ -51,10 +51,10 @@ export function ServicesPage() {
               <a href={`tel:${salon.phoneRaw}`} className="btn-gold">
                 <Phone size={16} /> {salon.phone}
               </a>
-              <button onClick={() => navigate('contact')} className="btn-outline">
+              <a href={routeToPath('contact')} onClick={(e) => handleInternalLinkClick(e, 'contact')} className="btn-outline">
                 Nous écrire
                 <ArrowRight size={16} />
-              </button>
+              </a>
             </div>
           </div>
         </div>
@@ -84,12 +84,13 @@ function ServiceSection({ category }: { category: typeof serviceCategories[numbe
                 <p className="text-sm text-ink-400">{category.tagline}</p>
               </div>
             </div>
-            <button
-              onClick={() => navigate('contact')}
+            <a
+              href={routeToPath('contact')}
+              onClick={(e) => handleInternalLinkClick(e, 'contact')}
               className="mt-6 hidden w-full btn-outline lg:flex"
             >
               Prendre rendez-vous
-            </button>
+            </a>
           </div>
 
           {/* Services */}
@@ -119,12 +120,13 @@ function ServiceSection({ category }: { category: typeof serviceCategories[numbe
         </div>
 
         {/* Mobile CTA */}
-        <button
-          onClick={() => navigate('contact')}
+        <a
+          href={routeToPath('contact')}
+          onClick={(e) => handleInternalLinkClick(e, 'contact')}
           className="mt-6 btn-outline w-full lg:hidden"
         >
           Prendre rendez-vous — {category.label}
-        </button>
+        </a>
       </div>
     </section>
   );

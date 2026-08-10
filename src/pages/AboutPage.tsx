@@ -4,7 +4,6 @@ import { useReveal } from '@/hooks/useReveal';
 import { ChampionBadge } from '@/components/ChampionBadge';
 import { SectionHeading } from '@/components/SectionHeading';
 import { CtaBanner } from '@/components/CtaBanner';
-import { navigate } from '@/router';
 
 const teamImg = 'https://images.pexels.com/photos/3993140/pexels-photo-3993140.jpeg?auto=compress&cs=tinysrgb&w=1200';
 const salonImg1 = 'https://images.pexels.com/photos/7195803/pexels-photo-7195803.jpeg?auto=compress&cs=tinysrgb&w=1200';

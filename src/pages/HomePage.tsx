@@ -1,6 +1,6 @@
 import { Phone, Calendar, MapPin, ArrowRight, Scissors } from 'lucide-react';
 import { salon, formatDayHours, getTodayHours, isOpenNow } from '@/data/salonInfo';
-import { navigate } from '@/router';
+import { routeToPath, handleInternalLinkClick } from '@/router';
 import { useSeo } from '@/hooks/useSeo';
 import { useReveal } from '@/hooks/useReveal';
 import { ChampionBadge } from '@/components/ChampionBadge';
@@ -48,9 +48,9 @@ export function HomePage() {
             </p>
 
             <div className="mt-9 flex flex-col gap-3 sm:flex-row">
-              <button onClick={() => navigate('contact')} className="btn-gold">
+              <a href={routeToPath('contact')} onClick={(e) => handleInternalLinkClick(e, 'contact')} className="btn-gold">
                 <Calendar size={18} /> Prendre rendez-vous
-              </button>
+              </a>
               <a href={`tel:${salon.phoneRaw}`} className="btn-outline !border-paper-200/30 !text-paper-50 hover:!bg-paper-50 hover:!text-ink-900">
                 <Phone size={18} /> {salon.phone}
               </a>
@@ -117,13 +117,14 @@ export function HomePage() {
                 l'enfant au chignon de la mariée. On prend le temps, on écoute,
                 on conseille.
               </p>
-              <button
-                onClick={() => navigate('about')}
+              <a
+                href={routeToPath('about')}
+                onClick={(e) => handleInternalLinkClick(e, 'about')}
                 className="mt-8 inline-flex items-center gap-2 text-sm font-medium text-ink-900 transition-colors hover:text-gold-600"
               >
                 Découvrir notre histoire
                 <ArrowRight size={16} className="transition-transform group-hover:translate-x-1" />
-              </button>
+              </a>
             </div>
 
             <div className="order-1 lg:order-2">
@@ -181,13 +182,14 @@ export function HomePage() {
                 une tradition familiale d'excellence et de convivialité — loin
                 de l'esprit parisien, profondément ancré dans le Neudorf.
               </p>
-              <button
-                onClick={() => navigate('about')}
+              <a
+                href={routeToPath('about')}
+                onClick={(e) => handleInternalLinkClick(e, 'about')}
                 className="mt-8 inline-flex items-center gap-2 text-sm font-medium text-gold-400 transition-colors hover:text-gold-300"
               >
                 La famille Specht
                 <ArrowRight size={16} />
-              </button>
+              </a>
             </div>
           </div>
         </div>
@@ -209,10 +211,10 @@ export function HomePage() {
           </div>
 
           <div className="mt-12 text-center">
-            <button onClick={() => navigate('services')} className="btn-primary">
+            <a href={routeToPath('services')} onClick={(e) => handleInternalLinkClick(e, 'services')} className="btn-primary">
               Voir toutes les prestations & tarifs
               <ArrowRight size={16} />
-            </button>
+            </a>
           </div>
         </div>
       </section>
@@ -233,10 +235,10 @@ export function HomePage() {
           </div>
 
           <div className="mt-12 text-center">
-            <button onClick={() => navigate('reviews')} className="btn-outline">
+            <a href={routeToPath('reviews')} onClick={(e) => handleInternalLinkClick(e, 'reviews')} className="btn-outline">
               Lire tous les avis
               <ArrowRight size={16} />
-            </button>
+            </a>
           </div>
         </div>
       </section>
